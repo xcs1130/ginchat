@@ -527,7 +527,7 @@
                         this.setTimeFlag()
                         //console.log("_addfriend....")
                         var that = this
-                        post("contact/addfriend", { targetName: dstobj, userId: userId() }, function (res) {
+                        post("contact/addfriend", { targetId: dstobj, userId: userId() }, function (res) {
                             if (res.Code == 0) {
                                 mui.toast("添加成功");
                                 that.loadfriends();
