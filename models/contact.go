@@ -35,17 +35,17 @@ func SearchFriend(userId uint) []UserBasic {
 }
 
 //添加好友
-func AddFriend(userId uint, targetId uint) (int, string) {
-	user := UserBasic{}
-	if targetId != 0 {
-		user = FindByID(targetId)
-		if user.Salt != "" {
-			if userId == user.ID {
+func AddFriend(userId uint, targetName string) (int, string) {
+	//user := UserBasic{}
+	if targetName != "" {
+		targetUser := FindUserByName(targetName)
+		if targetUser.Salt != "" {
+			if targetUser.ID == userId {
 				//自己加自己为好友的情况
 				return -1, "不能添加自己为好友"
 			}
 			contact0 := Contact{}
-			utils.DB.Where("owner_id=? and target_id=? and type=1", userId, targetId).Find(&contact0)
+			utils.DB.Where("owner_id=? and target_id=? and type=1", userId, targetUser.ID).Find(&contact0)
 			if contact0.ID != 0 {
 				return -1, "不能重复添加用户（该用户已被添加）"
 			}
@@ -60,7 +60,7 @@ func AddFriend(userId uint, targetId uint) (int, string) {
 
 			contact := Contact{}
 			contact.OwnerId = userId
-			contact.TargetId = targetId
+			contact.TargetId = targetUser.ID
 			contact.Type = 1
 			if err := utils.DB.Create(&contact).Error; err != nil {
 				tx.Rollback()
@@ -68,7 +68,7 @@ func AddFriend(userId uint, targetId uint) (int, string) {
 			}
 			//双向好友，好友的好友里面也有你
 			contact1 := Contact{}
-			contact1.OwnerId = targetId
+			contact1.OwnerId = targetUser.ID
 			contact1.TargetId = userId
 			contact1.Type = 1
 			if err := utils.DB.Create(&contact1).Error; err != nil {
