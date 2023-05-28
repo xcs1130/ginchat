@@ -48,5 +48,9 @@ func Router() *gin.Engine {
 	r.POST("/contact/createCommunity", service.CreateCommunity)
 	//群列表
 	r.POST("/contact/loadcommunity", service.LoadCommunity)
+	r.POST("/contact/joinGroup", service.JoinGroups)
+	//心跳续命 不合适  因为Node  所以前端发过来的消息再receProc里面处理
+	// r.POST("/user/heartbeat", service.Heartbeat)
+	//r.POST("/user/redisMsg", service.RedisMsg)
 	return r
 }

@@ -251,23 +251,14 @@ func SearchFriends(c *gin.Context) {
 }
 
 func AddFriend(c *gin.Context) {
-
 	userId, _ := strconv.Atoi(c.Request.FormValue("userId"))
-	targetName := c.Request.FormValue("targetId")
-	//targetId, _ := strconv.Atoi(c.Request.FormValue("targetId"))
-	code, msg := models.AddFriend(uint(userId), targetName)
-	// c.JSON(200, gin.H{
-	// 	"code":    0, //0成功 -1失败
-	// 	"message": "查询好友列表成功！",
-	// 	"data":    users,
-	// })
+	targetId, _ := strconv.Atoi(c.Request.FormValue("targetId"))
+	code, msg := models.AddFriend(uint(userId), uint(targetId))
 	if code == 0 {
 		utils.RespOK(c.Writer, code, msg)
 	} else {
 		utils.RespFail(c.Writer, msg)
-
 	}
-
 }
 
 //新建群
@@ -301,4 +292,26 @@ func LoadCommunity(c *gin.Context) {
 
 	}
 
+}
+
+//加入群 userId uint, comId uint
+func JoinGroups(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.Request.FormValue("userId"))
+	comId := c.Request.FormValue("comId")
+
+	//	name := c.Request.FormValue("name")
+	data, msg := models.JoinGroup(uint(userId), comId)
+	if data == 0 {
+		utils.RespOK(c.Writer, data, msg)
+	} else {
+		utils.RespFail(c.Writer, msg)
+	}
+}
+
+func FindByID(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.Request.FormValue("userId"))
+
+	//	name := c.Request.FormValue("name")
+	data := models.FindByID(uint(userId))
+	utils.RespOK(c.Writer, data, "ok")
 }
