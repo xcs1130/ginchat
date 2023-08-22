@@ -1,3 +1,3 @@
 # ginchat
 
-z这是一个基于gin和swagger的golang聊天项目
+这是一个基于gin和websocket的golang聊天项目
